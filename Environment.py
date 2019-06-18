@@ -26,13 +26,9 @@ class Physics(Identifiable):
       self.__sensorEventMapping__=mapping #{VisionSensor:[VisionPerception,GridVisionPerception], CommunicationSensor:[CommunicationAction]}
       self.EventSensorsDirectory={}
       
-      
-   
    def subscribe_event(self, sensor,temp_list):
     s=type(sensor)
     self.__sensorEventMapping__[s]=temp_list
-    
-  
         
    def makeSubscribtionDirectory(self, sensors):
        sub_dict = {e:[] for k,v in self.__sensorEventMapping__.items() for e in v}
@@ -54,14 +50,13 @@ class Physics(Identifiable):
 
    def set_SubscribtionRegistry(self,sub_dict):     
     self.EventSensorsDirectory=sub_dict     
-   
-   def isPossible(self, act,ambient,actions):
-    pass
 
-   def verifyAttempts(self,attempts,ambient,valid_actions):
-     pass
-
-   
+    #then cheap and bad way.. research is needed.
+    def execute(self,attempts,ambient, valid_actions):
+       for act in attempts:
+           if act in valid_actions:
+             if self.is_possible[type(act)](act, ambient):
+                 self.execute_action[type(act)](act, ambient)
    
 class Environment(Identifiable):
     
@@ -85,37 +80,33 @@ class Environment(Identifiable):
         return self.__sensors
     def subscriptionSetup(self, sensors):    
         self.__physics__.makeSubscribtionDirectory(sensors)
-    
-    def notifyPerception(self):   
-        for ag in self.getAmbient().getAgents(): 
-          per1=Perception(ag.getID())
-          sensors = self.getPhysics().EventSensorsDirectory[type(per1)] # get type of all sensors to be notified
-          for s in sensors:
-           if(s.getOwner()==(per1.getOwner())):
-            s.notifyEvent(per1)
             
-          
+    def notify_perceptions(self, perception_factory):
+        for ag in self.getAmbient().getAgents():
+            sensors = self.getPhysics().EventSensorsDirectory[perception_factory._type]
+            if len(sensors) > 0:
+                for s in sensors:
+                    perception = perception_factory(self, ag, s)
+                    s.notifyEvent(perception)
+                 
+
+
 #########################################################################
     
                   
-    def evolveEnvironment(self):
+    def evolveEnvironment(self, perception_factories):
+        for perception_factory in perception_factories:
+            self.notify_perceptions(perception_factory)
         
         agents=self.getAmbient().getAgents()
-       
-        self.evolutionStep(agents)
-        attempts=self.retrievingAttempts(agents) 
-        validityvalues=self.getPhysics().verifyAttempts(attempts,self.getAmbient(),self.getActions())
-        self.executeActions(attempts,validityvalues)
-    
-    def evolutionStep(self,agents):   
-      
         for a in agents:
             a.cycle()
             
-        
-           
-        
-   
+        attempts=self.retrievingAttempts(agents) 
+        ###### one step 
+        validityvalues=self.getPhysics().verifyAttempts(attempts,self.getAmbient(),self.getActions())
+        self.executeActions(attempts,validityvalues)
+        ######        
     
     def retrievingAttempts(self,agents):   
         attempts=[] 
@@ -129,14 +120,6 @@ class Environment(Identifiable):
                  attempts.append(tempact) 
         print(len(attempts))
         return attempts   
-         
-              
-    def executeActions(self,attempts,validityvalues):      
-           pass
-        
-        
-     
- 
         
     def __str__(self):
         return super().__str__() + "~"+  str(self.__ambient__)
@@ -148,7 +131,14 @@ class Environment(Identifiable):
         return self.__str__()
    
 
-
+class PerceptionFactory:
+    
+    def __init__(self, _type):
+        self._type = _type
+        
+    def __call__(self, env, agent, sensor):
+        pass
+    
 
 
 
