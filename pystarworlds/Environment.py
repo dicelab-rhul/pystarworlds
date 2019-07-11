@@ -78,7 +78,7 @@ class Environment(Identifiable):
            for ac in a.getActuators():
                 tempact=ac.act()
                 
-                if(tempact!=0):
+                if(tempact!=None):
                  attempts.append(tempact) 
       
         return attempts   
@@ -141,6 +141,7 @@ class Physics(Identifiable):
    
    def execute(self,attempts,env,valid_actions,rule_factories,executeaction_factories):
       
+       
        for act in attempts:
            if type(act) in valid_actions:
                for rule_factory in rule_factories:
