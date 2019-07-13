@@ -1,2 +1,3 @@
 pystarworlds.egg-info/*
-*/__pycache__/*
+pystarworlds/__pycache__/*
+

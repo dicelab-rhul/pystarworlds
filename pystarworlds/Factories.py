@@ -3,40 +3,33 @@
 Created on Fri Jun 28 13:38:02 2019
 
 @author: Nausheen Saba
+@author: Benedict Wilkins
 """
-
-
-
 
 class PerceptionFactory:
     
     def __init__(self, _type):
         self._type = _type
-      
-        print(self._type)
         
-    def __call__(self, environment, agent,sensor):
+    def __call__(self, ambient, sensor):
         pass
     
 
-class RuleFactory:
+class Rule:
     
     def __init__(self, _type):
         self._type = _type
       
-        
-    def __call__(self, attempts, environment, actions):
+    def __call__(self, ambient, events):
         pass
     
 
-class ActionFactory:
+class Executor:
     
     def __init__(self, _type):
         self._type = _type
-      
-        print(self._type)
         
-    def __call__(self, actorName,orient,currentcoordinate):
+    def __call__(self, ambient, events):
         pass
     
 

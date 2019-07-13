@@ -44,6 +44,7 @@ class Transient(Source, Sink):
         if(len(self.buffer) == 0):
             raise StopIteration
         return self.source()
+    
     def source(self):
        return self.buffer.pop()
     

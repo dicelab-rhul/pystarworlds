@@ -1,96 +1,47 @@
 """
 @author: Nausheen Saba Shahid
+@author: Benedict Wilkins
 """
-
 
 from .Identifiable import Identifiable
 
 class Mind(Identifiable):
        
-    def __post_init__(self, agentbody):
-        self.__agentbody__ = agentbody
+    def __post_init__(self, body):
+        self.body = body
         
-        self.__perceptions__=[]
     #@abstractmethod
     def cycle(self):
-        
-      self.revise()
-      self.perceive()
-      self.decide()
-   
-    def getBody(self):
-        return self.__agentbody__
-    def getName(self):
-        return self.__agentbody__.getID()
-  
-    def revise(self):
         pass
-    def perceive(self):
-        self.__perceptions__=[]
-        sensors=self.getBody().getSensors()
-        for s in sensors:
-          if(s.isEmpty()==False):  # add perception 
-             self.__perceptions__.extend(s.getPercepion())
-        
-    def decide(self):  # deliberate
-        pass
-    
-    def execute(self,ambient,action):  
-        action.execute(ambient)
-        self.__perceptions__=[]# empty for next cycle
-         
-    def _getPerceptions(self):
-       return self.__perceptions__ 
-    def attempt(self, actions):
-       pass
 
 #######################################
 
 class AgentBody(Identifiable):
     
-    def __init__(self, name, mind, actuators, sensors):
-        self.__mind__ = mind
-        self.__name__ = name
+    def __init__(self, mind, actuators, sensors):
+        self.mind = mind
+        #self.__name__ = name #ID IS ALREADY PART OF THE AGENT  - Identifiable
         if isinstance(actuators, dict) or isinstance(actuators, list) or isinstance(actuators, tuple):
-            self.__actuators__ = actuators
-            for a in self.__actuators__:
-                a.setOwner(self.getID())
+            self.actuators = actuators
+            for a in self.actuators:
+                a.owner = self.ID
         else:
             raise ValueError("actuators must be a dict, list or tuple")
         if isinstance(sensors, dict) or isinstance(sensors, list) or isinstance(sensors, tuple):
-            self.__sensors__ = sensors
-            for s in self.__sensors__:
-                s.setOwner(self.getID())
+            self.sensors = sensors
+            for s in self.sensors:
+                s.owner = self.ID
         else:
             raise ValueError("sensors must be a dict, list or tuple")
-        self.__mind__.__post_init__(self)
+            
+        self.mind.__post_init__(self)
          
     def cycle(self):
-        return self.__mind__.cycle()
-    
-    def actuators(self):
-        return self.__actuators__
-    
-    def sensors(self):
-        return self.__sensors__
-    
-    def mind(self):
-        return self.__mind__
+        return self.mind.cycle()
     
     def __hash__(self):
         return self.ID.__hash__()
         
     def __eq__(self):
         return self.ID.__eq__()
-
-  
- #############################################################################################################   
-    
-    def getName(self):
-        return self.__name__
-    def setName(self,name):
-        self.__name__=name
-  
-    def getID(self):
-        return self.getName()# -*- coding: utf-8 -*-
 
