@@ -11,9 +11,13 @@ class Sensor(Identifiable,Transient):
    super().__init__()
    self.isSensing=True;
    self.__compatibility__=compatibilitylist
+   
+   
   def notifyEvent(self,event):
   #  if(super().isEmpty()):  
       super().sink(event)
+      
+      
   def isCompatible(self, per):
        flag=False
        for com in self.__compatibility__:   

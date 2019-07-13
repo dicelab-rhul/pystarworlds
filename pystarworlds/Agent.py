@@ -50,7 +50,7 @@ class AgentBody(Identifiable):
     
     def __init__(self, name, mind, actuators, sensors):
         self.__mind__ = mind
-        self.__name__=name
+        self.__name__ = name
         if isinstance(actuators, dict) or isinstance(actuators, list) or isinstance(actuators, tuple):
             self.__actuators__ = actuators
             for a in self.__actuators__:
@@ -66,19 +66,16 @@ class AgentBody(Identifiable):
         self.__mind__.__post_init__(self)
          
     def cycle(self):
-        
         return self.__mind__.cycle()
     
     def actuators(self):
-        return list(self.__actuators__.values())
+        return self.__actuators__
     
     def sensors(self):
-        return list(self.__sensors__.values())
-    
-    def getSensors(self):
         return self.__sensors__
-    def getActuators(self):
-        return self.__actuators__
+    
+    def mind(self):
+        return self.__mind__
     
     def __hash__(self):
         return self.ID.__hash__()
@@ -86,8 +83,6 @@ class AgentBody(Identifiable):
     def __eq__(self):
         return self.ID.__eq__()
 
-    def getMind(self):
-        return self.__mind__
   
  #############################################################################################################   
     

@@ -2,20 +2,17 @@
 @author: Nausheen Saba Shahid
 """
 
-
-
 from .Identifiable import Identifiable
 from .Perception import Perception
 from .Factories import PerceptionFactory,RuleFactory,ActionFactory
-
 
 class Environment(Identifiable):
     
     def __init__(self, physics, ambient,actions,sensors):  #,events): not used 
         self.__physics__= physics
         self.__ambient__ = ambient
-        self.__actions__=actions
-        self.__sensors=sensors
+        self.__actions__ = actions
+        self.__sensors = sensors
         self.subscriptionSetup(sensors)
         self.time=1
         self.attempts=[]
@@ -41,9 +38,8 @@ class Environment(Identifiable):
     def subscriptionSetup(self, sensors):    
         self.__physics__.makeSubscribtionDirectory(sensors)
             
-        
-    
 #########################################################################
+        
     def simulate(self, cycles):
         self.setupFactories()
         i=0
@@ -56,21 +52,20 @@ class Environment(Identifiable):
         
           self.evolveEnvironment()   
           i=i+1
-        
-       
- 
                   
     def evolveEnvironment(self):
         for perception_factory in self.perception_factories:
             self.getPhysics().notify_perceptions(self,perception_factory)
         
-        agents=self.getAmbient().getAgents()
+        agents=self.getAmbient().agents
         for a in agents:
             a.cycle()
             
         attempts=self.retrievingAttempts(agents) 
         self.getPhysics().execute(attempts,self,self.getActions(),self.rule_factories,self.executeaction_factories)
-        ######        
+        
+        print(agents)
+        print(attempts)       
     
     def retrievingAttempts(self,agents):   
         attempts=[] 
@@ -91,16 +86,18 @@ class Environment(Identifiable):
     
     def __repr__(self):
         return self.__str__()
+    
+    
 class Ambient(Identifiable):
-    def __init__(self, agents,objects):
-        self.__agents__ = agents
-        self.__objects__ = objects
-    def getAgents(self):
-        return self.__agents__
-    def getObjetcs(self):
-        return self.__objects__
+    
+    def __init__(self, agents, objects):
+        self.agents = agents
+        #what is this conceptually?
+        self.objects = objects
+    
     def __unicode__(self):
         return self.__str__()
+    
     def __repr__(self):
         return self.__str__()
   
@@ -163,7 +160,7 @@ class Physics(Identifiable):
         sensors = self.EventSensorsDirectory[perception_factory._type]
      
 
-        for ag in env.getAmbient().getAgents():
+        for ag in env.getAmbient().agents:
             if len(sensors) > 0:
                 for s in sensors:
                    if(s.getOwner()==(ag.getID())):
