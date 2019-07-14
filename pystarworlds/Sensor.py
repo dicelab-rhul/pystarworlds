@@ -13,7 +13,7 @@ class Sensor(Identifiable,Transient):
        self.owner = None
        #self.__compatibility__=compatibilitylist
    
-    def notifyEvent(self,event):
+    def notify(self, event):
         super(Sensor, self).sink(event)
         
 ''' think about this

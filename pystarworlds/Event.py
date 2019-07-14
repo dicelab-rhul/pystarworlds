@@ -60,7 +60,8 @@ class Transient(Source, Sink):
         else: 
          return True
      
-class Event(Identifiable,Transient):
+class Event(Identifiable):
+    
     def __init__(self):
-       pass # self.source = None 
+        pass 
       

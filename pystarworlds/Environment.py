@@ -5,30 +5,27 @@
 
 from .Identifiable import Identifiable
 #from .Perception import Perception
-from .Factories import PerceptionFactory#,RuleFactory,ActionFactory
 
 class Environment(Identifiable):
     
-    def __init__(self, physics, ambient,actions,sensors):  #,events): not used 
+    def __init__(self, physics, ambient, processes, actions, sensors):  #,events): not used 
         self.physics = physics
         self.ambient = ambient
         self.actions = actions
         self.sensors = sensors
-        self.subscriptionSetup(sensors)
+        self.physics.makeSubscriptionDirectory(sensors)
         self.time=1
         self.attempts=[]
         self.end=False
         self.perception_factories = []
         self.rule_factories = []
         self.executeaction_factories=[]
+        
+        self.events = []
+        self.processes = processes
       
-    def setupFactories(self):
-        self.perception_factories = [PerceptionFactory()]
-        #self.rule_factories = [RuleFactory()]
-        #self.executeaction_factories = [RuleFactory()]
-    
-    def subscriptionSetup(self, sensors): 
-        self.physics.makeSubscribtionDirectory(sensors)
+   
+        
             
 #########################################################################
         
@@ -46,15 +43,17 @@ class Environment(Identifiable):
           i=i+1
                   
     def evolveEnvironment(self):
-        for perception_factory in self.perception_factories:
-            self.physics.notify_perceptions(self, perception_factory)
+        for process in self.processes:
+            print("process:", process)
+            process(self) #allow all processes to do their thing
+
         
         agents=self.ambient.agents.values()
         for a in agents:
             a.cycle()
             
         #attempts=self.retrievingAttempts(agents) 
-        attempts = [action for agent in agents for actuator in agent.actuators for action in actuator]
+        attempts = [action for agent in agents for actuator in agent.actuators() for action in actuator]
         self.physics.execute(self.ambient, attempts, self.rule_factories, self.executeaction_factories)
         
         print("AGENTS:", agents)
@@ -80,49 +79,28 @@ class Ambient(Identifiable):
 class Physics(Identifiable):
          
     def __init__(self, mapping):
-        self.__sensorEventMapping__=mapping #{VisionSensor:[VisionPerception,GridVisionPerception], CommunicationSensor:[CommunicationAction]}
-        self.EventSensorsDirectory={}
+        self.sensor_event_mapping = mapping #{VisionSensor:[VisionPerception,GridVisionPerception], CommunicationSensor:[CommunicationAction]}
+        self.subscriptions = {}
       
     def subscribe_event(self, sensor,temp_list):
           s=type(sensor)
-          self.__sensorEventMapping__[s]=temp_list
+          self.sensor_event_mapping[s]=temp_list
         
-    #names! subscription
-    def makeSubscribtionDirectory(self, sensors):
-       sub_dict = {e:[] for k,v in self.__sensorEventMapping__.items() for e in v}
+    #names! subscription,
+    def makeSubscriptionDirectory(self, sensors):
+       sub_dict = {e:[] for k,v in self.sensor_event_mapping.items() for e in v}
        for s in sensors:   
-           events = self.__sensorEventMapping__[type(s)]
+           events = self.sensor_event_mapping[type(s)]
            for e in events:
                sub_dict[e].append(s) 
-       self.set_SubscribtionRegistry(sub_dict)  
+       self.subscriptions=sub_dict
        
-       
-    def get_SubscribtionSize(self):
-           return self.EventSensorsDirectory__.items()
-
-    def get_eventsOfSensor(self,s):     
-        return self.EventSensorsDirectory[type(s)]
-
-    def get_SubscribtionRegistry(self):     
-        return self.EventSensorsDirectory
-
-    def set_SubscribtionRegistry(self,sub_dict):     
-        self.EventSensorsDirectory=sub_dict     
-
-                          
-    def notify_perceptions(self, env, perception_factory):
-       # Notify all agents who have sensor of that factory type  
-        sensors = self.EventSensorsDirectory[perception_factory._type]
-        ''' why all this?
-        for ag in env.getAmbient().agents:
-            if len(sensors) > 0:
-                for s in sensors:
-                   if(s.getOwner()==(ag.getID())):
-                     perception = perception_factory(env, ag, s)
-                     s.notifyEvent(perception)  
-        '''
-        for s in sensors:
-            s.notifyEvent(perception_factory(env.ambient, s))
+    def notify_agent(self, agent, event):
+        for sensor in agent.sensors():
+            print(sensor)
+            if self.sensor_event_mapping.get(type(sensor), None):
+                print("notify", sensor)
+                sensor.notify(event)
 
     def execute(self, ambient, attempts, rules, executors):
         for attempt in attempts:
