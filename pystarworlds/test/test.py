@@ -7,7 +7,7 @@ Created on Thu Jul 25 15:42:37 2019
 """
 
 from pystarworlds.Environment import Environment, Ambient, Physics
-from pystarworlds.Action import Action
+from pystarworlds.Event import Action, Perception
 from pystarworlds.Agent import Body, Mind, Actuator, Sensor
 
 class _Ambient(Ambient):
@@ -20,7 +20,7 @@ class _Action(Action):
     executor = lambda env, action: None #do nothing
     pass
 
-class Perception(Perception):
+class _Perception(Perception):
     pass
 
 class _Mind(Mind):
