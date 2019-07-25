@@ -5,25 +5,22 @@
 
 from .Identifiable import Identifiable
 #from .Perception import Perception
+from collections import defaultdict
 
 class Environment(Identifiable):
     
-    def __init__(self, physics, ambient, processes, actions, sensors):  #,events): not used 
+    def __init__(self, physics, ambient, processes, actions):  
         self.physics = physics
         self.ambient = ambient
         self.actions = actions
-        self.sensors = sensors
-        self.physics.makeSubscriptionDirectory(sensors)
-        self.time=1
         self.attempts=[]
-        self.end=False
-        self.perception_factories = []
-        self.rule_factories = []
-        self.executeaction_factories=[]
-        
-        self.events = []
         self.processes = processes
-      
+        
+        #move this to the physics ...?
+        self.sensors = [s for a in self.ambient.agents.values() for s in a.sensors()]
+        self.physics.makeSubscriptionDirectory(self.sensors)
+
+
    
         
             
@@ -34,17 +31,16 @@ class Environment(Identifiable):
         i=0
         while(i<cycles):
            
-          print("_______________________________________________________________________________")
-          print("_______________________________________________________________________________")
-          print("  Time stamp ")
-          print(i)
+          #print("_______________________________________________________________________________")
+          #print("_______________________________________________________________________________")
+          #print("  Time stamp ")
+          #print(i)
         
           self.evolveEnvironment()   
           i=i+1
                   
     def evolveEnvironment(self):
         for process in self.processes:
-            print("process:", process)
             process(self) #allow all processes to do their thing
 
         
@@ -52,12 +48,11 @@ class Environment(Identifiable):
         for a in agents:
             a.cycle()
             
-        #attempts=self.retrievingAttempts(agents) 
         attempts = [action for agent in agents for actuator in agent.actuators() for action in actuator]
-        self.physics.execute(self.ambient, attempts, self.rule_factories, self.executeaction_factories)
+        self.physics.execute(self, attempts)
         
-        print("AGENTS:", agents)
-        print("ATTEMPTS:", attempts)       
+        #print("AGENTS:", agents)
+        #print("ATTEMPTS:", attempts)       
         
     def __str__(self):
         return super().__str__() + "~"+  str(self.__ambient__)
@@ -78,9 +73,11 @@ class Ambient(Identifiable):
     
 class Physics(Identifiable):
          
-    def __init__(self, mapping):
+    def __init__(self, mapping, preconditions, executors, default_precondition = lambda: lambda action, ambient: True):
         self.sensor_event_mapping = mapping #{VisionSensor:[VisionPerception,GridVisionPerception], CommunicationSensor:[CommunicationAction]}
         self.subscriptions = {}
+        self.preconditions = defaultdict(default_precondition, {r._type:r for r in preconditions})
+        self.executors = {r._type:r for r in executors}
       
     def subscribe_event(self, sensor,temp_list):
           s=type(sensor)
@@ -97,15 +94,16 @@ class Physics(Identifiable):
        
     def notify_agent(self, agent, event):
         for sensor in agent.sensors():
-            print(sensor)
-            if self.sensor_event_mapping.get(type(sensor), None):
-                print("notify", sensor)
+            if type(event) in self.sensor_event_mapping.get(type(sensor), None):
+                #print("notify", sensor)
                 sensor.notify(event)
 
-    def execute(self, ambient, attempts, rules, executors):
+    def execute(self, env, attempts):
         for attempt in attempts:
-            if rules[type(attempt)](ambient, attempt): #this is checking a pre-condition
-                executors[type(attempt)](ambient, attempt) #make changes to the ambient
+            #print(attempt)
+            #print(self.preconditions[type(attempt)])
+            if self.preconditions[type(attempt)](env, attempt): #this is checking a pre-condition
+                self.executors[type(attempt)](env, attempt) #make changes to the ambient
         
 ''' No.
    def execute(self,attempts,env,valid_actions,rule_factories,executeaction_factories):

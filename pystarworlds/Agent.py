@@ -5,7 +5,7 @@
 
 from .Identifiable import Identifiable
 
-class Mind(Identifiable):
+class Mind:
        
     def __post_init__(self, body):
         self.body = body
@@ -37,7 +37,7 @@ class AgentBody(Identifiable):
                 self.sensors = lambda : list(self._sensors.values())
             else:
                 self.sensors = lambda : self.sensors
-            print(sensors)
+            #print(sensors)
             for s in self.sensors():
                 s.owner = self.ID
         else:

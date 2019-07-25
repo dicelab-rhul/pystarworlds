@@ -15,12 +15,12 @@ class PerceptionFactory:
         pass
     
 
-class Rule:
+class Precondition:
     
     def __init__(self, _type):
         self._type = _type
       
-    def __call__(self, ambient, events):
+    def __call__(self, env, action):
         pass
     
 
@@ -29,7 +29,7 @@ class Executor:
     def __init__(self, _type):
         self._type = _type
         
-    def __call__(self, ambient, events):
+    def __call__(self, env, action):
         pass
     
 
