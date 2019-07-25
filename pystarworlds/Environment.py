@@ -9,20 +9,15 @@ from collections import defaultdict
 
 class Environment(Identifiable):
     
-    def __init__(self, physics, ambient, processes, actions):  
+    def __init__(self, physics, ambient, processes, *args):  
         self.physics = physics
         self.ambient = ambient
-        self.actions = actions
-        self.attempts=[]
+        #self.actions = actions
+        #self.attempts = [] 
         self.processes = processes
         
         #move this to the physics ...?
-        self.sensors = [s for a in self.ambient.agents.values() for s in a.sensors()]
-        self.physics.makeSubscriptionDirectory(self.sensors)
-
-
-   
-        
+        self.physics.makeSubscriptionDirectory(self.ambient.agents)        
             
 #########################################################################
         
@@ -70,27 +65,28 @@ class Ambient(Identifiable):
         self.agents = {ag.ID:ag for ag in agents}
         self.objects = {obj.ID:obj for obj in objects} #what is this conceptually?  
     
-    
 class Physics(Identifiable):
          
-    def __init__(self, mapping, preconditions, executors, default_precondition = lambda: lambda action, ambient: True):
-        self.sensor_event_mapping = mapping #{VisionSensor:[VisionPerception,GridVisionPerception], CommunicationSensor:[CommunicationAction]}
+    def __init__(self, actions, default_precondition = lambda action, ambient: True): #mapping, preconditions, executors, ):
+        #self.sensor_event_mapping = mapping #{VisionSensor:[VisionPerception,GridVisionPerception], CommunicationSensor:[CommunicationAction]}
         self.subscriptions = {}
-        self.preconditions = defaultdict(default_precondition, {r._type:r for r in preconditions})
-        self.executors = {r._type:r for r in executors}
+        self.actions = actions
+        self.preconditions = defaultdict(lambda : default_precondition, {action:action.precondition for action in self.actions})
+        self.executors = {action:action.executor for action in self.actions}
       
-    def subscribe_event(self, sensor,temp_list):
-          s=type(sensor)
-          self.sensor_event_mapping[s]=temp_list
+    
         
     #names! subscription,
-    def makeSubscriptionDirectory(self, sensors):
-       sub_dict = {e:[] for k,v in self.sensor_event_mapping.items() for e in v}
-       for s in sensors:   
-           events = self.sensor_event_mapping[type(s)]
-           for e in events:
-               sub_dict[e].append(s) 
-       self.subscriptions=sub_dict
+    def makeSubscriptionDirectory(self, agents):
+        #TODO REWRITE THIS
+        sensors = [s for a in agents for s in a.sensors()]
+        
+        sub_dict = {e:[] for k,v in self.sensor_event_mapping.items() for e in v}
+        for s in sensors:   
+            events = self.sensor_event_mapping[type(s)]
+            for e in events:
+                sub_dict[e].append(s) 
+        self.subscriptions=sub_dict
        
     def notify_agent(self, agent, event):
         for sensor in agent.sensors():
@@ -116,6 +112,14 @@ class Physics(Identifiable):
                          executeaction_factory(env,act)
                         
 '''          
+
+class Process(Identifiable):
+    
+    def __init__(self):
+        pass
+    
+    def __call__(self, ambient):
+        pass #return a list of events
             
                 
    

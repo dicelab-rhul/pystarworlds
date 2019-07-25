@@ -1,3 +1,4 @@
-pystarworlds.egg-info/*
-pystarworlds/__pycache__/*
+pystarworlds.egg-info/
+pystarworlds/__pycache__/
+.spyproject/
 

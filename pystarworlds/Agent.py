@@ -3,7 +3,11 @@
 @author: Benedict Wilkins
 """
 
+#from ABC import abstractmethod
+
 from .Identifiable import Identifiable
+from .Event import Transient
+
 
 class Mind:
        
@@ -11,12 +15,12 @@ class Mind:
         self.body = body
         
     #@abstractmethod
-    def cycle(self):
-        pass
+    #def cycle(self):
+    #    pass
 
 #######################################
 
-class AgentBody(Identifiable):
+class Body(Identifiable):
     
     def __init__(self, mind, actuators, sensors):
         self.mind = mind
@@ -54,3 +58,23 @@ class AgentBody(Identifiable):
     def __eq__(self):
         return self.ID.__eq__()
 
+class Actuator(Transient, Identifiable):
+  
+    def __init__(self,compatibilitylist):
+        super(Actuator, self).__init__()
+        self.owner = None
+        #self.__isWorking__= True;
+        #self.__compatibility__=compatibilitylist
+        
+    def attempt(self, action):
+        super(Actuator, self).sink(action)
+
+class Sensor(Identifiable,Transient):
+    
+    def __init__(self,compatibilitylist):
+       super(Sensor, self).__init__()
+       self.owner = None
+       #self.__compatibility__=compatibilitylist
+   
+    def notify(self, event):
+        super(Sensor, self).sink(event)

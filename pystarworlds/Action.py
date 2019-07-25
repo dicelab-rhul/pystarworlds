@@ -8,4 +8,4 @@ class Action(Event):
     def __init__(self, actor):
         super(Action, self).__init__()
         self.__actor__ = actor
-    
+        
