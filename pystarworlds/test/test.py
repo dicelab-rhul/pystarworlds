@@ -10,15 +10,21 @@ from pystarworlds.Environment import Environment, Ambient, Physics
 from pystarworlds.Event import Action, Perception
 from pystarworlds.Agent import Body, Mind, Actuator, Sensor
 
+class _Physics(Physics):
+    pass
+
 class _Ambient(Ambient):
     
-    def __init__(self, agents, objects):
-        super(_Ambient, self).__init__(agents, objects)
+    def __init__(self, agents):
+        super(_Ambient, self).__init__(agents)
+        self.ACTION_TEST = False
+        
+    def action_test(self):
+        self.ACTION_TEST = True
 
 class _Action(Action):
-    precondition = lambda env, action: True
-    executor = lambda env, action: None #do nothing
-    pass
+    precondition = lambda ambient, action: True
+    executor = lambda ambient, action: ambient.action_test()
 
 class _Perception(Perception):
     pass
@@ -26,19 +32,36 @@ class _Perception(Perception):
 class _Mind(Mind):
     
     def cycle(self):
-        pass
+        action = _Action()
+        self.body.find_actuators(action)[0].attempt(action)
     
 class _Actuator(Actuator):
-    pass
-
+    subscribe = [_Action]
+    
+    def __init__(self):
+        super(_Actuator, self).__init__()
+        self.ACTUATOR_TEST = False
+    
+    def attempt(self, action):
+        self.ACTUATOR_TEST = True
+        super(_Actuator, self).attempt(action)
+        
 class _Sensor(Sensor):
-    subscribed = []
+    subscribe = [_Perception]
     pass
     
 
-agents = [Body(_Mind(), [_Sensor()], [_Actuator()])]
+actuator = _Actuator()
+sensor = _Sensor()
+agents = [Body(_Mind(), [actuator], [sensor])]
 actions = [_Action]
-physics = Physics(actions)
-ambient = Ambient(agents)
+physics = _Physics(actions)
+ambient = _Ambient(agents)
 
-e = Environment(physics,ambient,None)
+e = Environment(physics,ambient)
+
+e.simulate()
+
+
+assert ambient.ACTION_TEST 
+assert actuator.ACTUATOR_TEST

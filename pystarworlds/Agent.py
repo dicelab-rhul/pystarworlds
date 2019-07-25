@@ -48,7 +48,16 @@ class Body(Identifiable):
             raise ValueError("sensors must be a dict, list or tuple")
             
         self.mind.__post_init__(self)
-         
+        
+    def find_actuators(self, action):
+        return self.find(action, self.actuators())
+        
+    def find_sensors(self, perception):
+        return self.find(perception, self.sensors())
+    
+    def find(self, event, collection):
+        return [arg for arg in collection if type(event) in arg.subscribe]
+                    
     def cycle(self):
         return self.mind.cycle()
     
@@ -65,6 +74,7 @@ class Actuator(Identifiable, Transient):
         self.owner = None
         
     def attempt(self, action):
+        action.__post_init__(self.owner)
         super(Actuator, self).sink(action)
 
 class Sensor(Identifiable, Transient):
@@ -73,5 +83,5 @@ class Sensor(Identifiable, Transient):
        super(Sensor, self).__init__()
        self.owner = None
 
-    def notify(self, event):
-        super(Sensor, self).sink(event)
+    def notify(self, perception):
+        super(Sensor, self).sink(perception)

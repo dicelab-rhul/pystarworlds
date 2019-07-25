@@ -25,9 +25,12 @@ class Source:
 
 class Sink:
     
-    @abstractmethod
+    def __init__(self, buffer):
+        self.buffer = buffer
+    
     def sink(self, event):
-        pass
+        assert type(event) in type(self).subscribe
+        self.buffer.append(event)
   
     # class for buffer of event
   
@@ -35,8 +38,9 @@ class Sink:
 class Transient(Source, Sink):
     
     def __init__(self):
-       self.buffer =[]
-        
+        Sink.__init__(self, [])
+        Source.__init__(self)
+
     def __len__(self):
         return len(self.buffer)
     
@@ -65,7 +69,6 @@ class Event(Identifiable):
     def __init__(self):
         pass 
     
-    
 class Perception(Event):
     
     def __init__(self):
@@ -73,8 +76,11 @@ class Perception(Event):
         
 class Action(Event):
     
-    def __init__(self, actor):
+    def __init__(self):
         super(Action, self).__init__()
+        self.__actor__ = None
+        
+    def __post_init__(self, actor):
         self.__actor__ = actor
         
       
