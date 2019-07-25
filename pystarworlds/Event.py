@@ -64,4 +64,17 @@ class Event(Identifiable):
     
     def __init__(self):
         pass 
+    
+    
+class Perception(Event):
+    
+    def __init__(self):
+        super(Perception, self).__init__()
+        
+class Action(Event):
+    
+    def __init__(self, actor):
+        super(Action, self).__init__()
+        self.__actor__ = actor
+        
       

@@ -6,9 +6,9 @@ Created on Thu Jul 25 15:42:37 2019
 @author: ben
 """
 
-from Environment import Environment, Ambient, Physics
-from Action import Action
-from Agent import Body, Mind
+from pystarworlds.Environment import Environment, Ambient, Physics
+from pystarworlds.Action import Action
+from pystarworlds.Agent import Body, Mind, Actuator, Sensor
 
 class _Ambient(Ambient):
     
@@ -20,17 +20,25 @@ class _Action(Action):
     executor = lambda env, action: None #do nothing
     pass
 
+class Perception(Perception):
+    pass
+
 class _Mind(Mind):
     
     def cycle(self):
         pass
     
-class _Actuator()
+class _Actuator(Actuator):
+    pass
+
+class _Sensor(Sensor):
+    subscribed = []
+    pass
     
 
-agents = 
+agents = [Body(_Mind(), [_Sensor()], [_Actuator()])]
 actions = [_Action]
 physics = Physics(actions)
-ambient = Ambient()
+ambient = Ambient(agents)
 
-e = Environment(physics,ambient,processes)
+e = Environment(physics,ambient,None)

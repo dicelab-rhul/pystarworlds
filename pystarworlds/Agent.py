@@ -30,7 +30,7 @@ class Body(Identifiable):
             if isinstance(actuators, dict):
                 self.actuators = lambda : list(self._actuators.values())
             else:
-                self.actuators = lambda : self.actuators
+                self.actuators = lambda : self._actuators
             for a in self.actuators():
                 a.owner = self.ID
         else:
@@ -40,7 +40,7 @@ class Body(Identifiable):
             if isinstance(sensors, dict):
                 self.sensors = lambda : list(self._sensors.values())
             else:
-                self.sensors = lambda : self.sensors
+                self.sensors = lambda : self._sensors
             #print(sensors)
             for s in self.sensors():
                 s.owner = self.ID
@@ -58,23 +58,20 @@ class Body(Identifiable):
     def __eq__(self):
         return self.ID.__eq__()
 
-class Actuator(Transient, Identifiable):
+class Actuator(Identifiable, Transient):
   
-    def __init__(self,compatibilitylist):
+    def __init__(self):
         super(Actuator, self).__init__()
         self.owner = None
-        #self.__isWorking__= True;
-        #self.__compatibility__=compatibilitylist
         
     def attempt(self, action):
         super(Actuator, self).sink(action)
 
-class Sensor(Identifiable,Transient):
+class Sensor(Identifiable, Transient):
     
-    def __init__(self,compatibilitylist):
+    def __init__(self):
        super(Sensor, self).__init__()
        self.owner = None
-       #self.__compatibility__=compatibilitylist
-   
+
     def notify(self, event):
         super(Sensor, self).sink(event)

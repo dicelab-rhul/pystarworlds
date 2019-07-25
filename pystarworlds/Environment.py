@@ -9,7 +9,7 @@ from collections import defaultdict
 
 class Environment(Identifiable):
     
-    def __init__(self, physics, ambient, processes, *args):  
+    def __init__(self, physics, ambient, processes=[], *args):  
         self.physics = physics
         self.ambient = ambient
         #self.actions = actions
@@ -17,7 +17,7 @@ class Environment(Identifiable):
         self.processes = processes
         
         #move this to the physics ...?
-        self.physics.makeSubscriptionDirectory(self.ambient.agents)        
+        self.physics.makeSubscriptionDirectory(self.ambient.agents.values())        
             
 #########################################################################
         
@@ -61,36 +61,43 @@ class Environment(Identifiable):
     
 class Ambient(Identifiable):
     
-    def __init__(self, agents, objects):
+    def __init__(self, agents, objects=[]):
         self.agents = {ag.ID:ag for ag in agents}
         self.objects = {obj.ID:obj for obj in objects} #what is this conceptually?  
     
 class Physics(Identifiable):
          
     def __init__(self, actions, default_precondition = lambda action, ambient: True): #mapping, preconditions, executors, ):
-        #self.sensor_event_mapping = mapping #{VisionSensor:[VisionPerception,GridVisionPerception], CommunicationSensor:[CommunicationAction]}
+        self.sensor_event_mapping = mapping #{VisionSensor:[VisionPerception,GridVisionPerception], CommunicationSensor:[CommunicationAction]}
         self.subscriptions = {}
         self.actions = actions
         self.preconditions = defaultdict(lambda : default_precondition, {action:action.precondition for action in self.actions})
         self.executors = {action:action.executor for action in self.actions}
-      
-    
-        
-    #names! subscription,
-    def makeSubscriptionDirectory(self, agents):
-        #TODO REWRITE THIS
+     
+    def __post_init__(self, agents):
         sensors = [s for a in agents for s in a.sensors()]
+        sensor_types = {s.type for s in sensors}
         
+        self.subscription_dict
+        
+        for s in sensors:
+            
+        
+        
+        '''
         sub_dict = {e:[] for k,v in self.sensor_event_mapping.items() for e in v}
         for s in sensors:   
             events = self.sensor_event_mapping[type(s)]
             for e in events:
                 sub_dict[e].append(s) 
         self.subscriptions=sub_dict
+        '''
+        
+       
        
     def notify_agent(self, agent, event):
         for sensor in agent.sensors():
-            if type(event) in self.sensor_event_mapping.get(type(sensor), None):
+            if type(event) in sensor.
                 #print("notify", sensor)
                 sensor.notify(event)
 
