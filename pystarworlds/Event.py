@@ -19,7 +19,6 @@ class Source:
     @abstractmethod
     def source(self):
         pass
- 
    
     # class for sink of event
 
@@ -83,4 +82,12 @@ class Action(Event):
     def __post_init__(self, actor):
         self.__actor__ = actor
         
+class Executor:
+    
+    def __init__(self, _type):
+        self._type = _type
+        
+    def __call__(self, env, action):
+        pass
+    
       

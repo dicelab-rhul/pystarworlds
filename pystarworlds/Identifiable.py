@@ -24,8 +24,10 @@ class Identifiable(ABC):    #Identifiable is inherited from ABC
     
     def __str__(self):       # equvilent to tostring
         return self.__class__.__name__ + self.ID
+    
     def __unicode__(self):
         return self.__str__()
+    
     def __repr__(self):
         return self.__str__()
     

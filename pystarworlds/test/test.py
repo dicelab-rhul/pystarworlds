@@ -23,7 +23,6 @@ class _Ambient(Ambient):
         self.ACTION_TEST = True
 
 class _Action(Action):
-    precondition = lambda ambient, action: True
     executor = lambda ambient, action: ambient.action_test()
 
 class _Perception(Perception):
@@ -48,8 +47,13 @@ class _Actuator(Actuator):
         
 class _Sensor(Sensor):
     subscribe = [_Perception]
-    pass
     
+    def __init__(self):
+        super(_Sensor, self).__init__()
+        self.SENSOR_TEST = False
+        
+    def notify(self, perception):
+        self.SENSOR_TEST = True
 
 actuator = _Actuator()
 sensor = _Sensor()
@@ -65,3 +69,4 @@ e.simulate()
 
 assert ambient.ACTION_TEST 
 assert actuator.ACTUATOR_TEST
+assert sensor.SENSOR_TEST
