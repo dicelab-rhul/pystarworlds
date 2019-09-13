@@ -41,7 +41,7 @@ class Body(Identifiable):
                 self.sensors = lambda : list(self._sensors.values())
             else:
                 self.sensors = lambda : self._sensors
-            #print(sensors)
+
             for s in self.sensors():
                 s.owner = self.ID
         else:

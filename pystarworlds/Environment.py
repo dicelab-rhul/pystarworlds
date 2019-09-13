@@ -37,10 +37,7 @@ class Environment(Identifiable):
             
         attempts = [action for agent in agents for actuator in agent.actuators() for action in actuator]
         events = self.physics.execute(self, attempts)
-        
-        #print("AGENTS:", agents)
-        #print("ATTEMPTS:", attempts)       
-        
+    
     def __str__(self):
         return super().__str__() + "~"+  str(self.__ambient__)
     
@@ -55,8 +52,6 @@ class Ambient(Identifiable):
     
     def __init__(self, agents, objects=[]):
         self.agents = {ag.ID:ag for ag in agents}
-        print([ag for ag in self.agents])
-        print([ag.ID for ag in self.agents.values()])
         self.objects = {obj.ID:obj for obj in objects} #what is this conceptually?  
     
 class Physics(Identifiable):
