@@ -35,7 +35,7 @@ class Environment(Identifiable):
         for a in agents:
             a.cycle()
             
-        attempts = [action for agent in agents for actuator in agent.actuators() for action in actuator]
+        attempts = [action for agent in agents for actuator in agent.actuators.values() for action in actuator]
         events = self.physics.execute(self, attempts)
     
     def __str__(self):
@@ -62,14 +62,14 @@ class Physics(Identifiable):
         self.executors = {action:action.executor(action) for action in self.actions}
      
     def __post_init__(self, agents):
-        sensors = [s for a in agents for s in a.sensors()]
+        sensors = [s for a in agents for s in a.sensors.values()]
         for sensor in sensors:
             for sub in sensor.subscribe:
                 self.subscriptions[sub].append(sensor)
 
     def notify_agent(self, agent, event):
         #rethink this
-        for sensor in agent.sensors():
+        for sensor in agent.sensors.values():
             if type(event) in sensor.subscribe:
                 sensor.notify(event)
 

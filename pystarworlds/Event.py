@@ -1,11 +1,12 @@
 """
+@author: Benedict Wilkins
 @author: Nausheen Saba Shahid
 """
 
+import warnings
 
-# class for event
-# class for source of event
 from abc import  abstractmethod
+
 from .Identifiable import Identifiable
 
 class Source:
@@ -19,9 +20,7 @@ class Source:
     @abstractmethod
     def source(self):
         pass
-   
-    # class for sink of event
-
+    
 class Sink:
     
     def __init__(self, buffer):
@@ -30,9 +29,6 @@ class Sink:
     def sink(self, event):
         assert type(event) in type(self).subscribe
         self.buffer.append(event)
-  
-    # class for buffer of event
-  
     
 class Transient(Source, Sink):
     
@@ -44,9 +40,9 @@ class Transient(Source, Sink):
         return len(self.buffer)
     
     def __next__(self):
-        if(len(self.buffer) == 0):
-            raise StopIteration
-        return self.source()
+        if not self.isEmpty():
+            return self.source()
+        raise StopIteration()
     
     def source(self):
        return self.buffer.pop()
@@ -54,33 +50,38 @@ class Transient(Source, Sink):
     def sink(self, event):
         self.buffer.append(event)
         
-    def setEmpty(self):
-       self.buffer =[]
+    def clear(self):
+       self.buffer.clear()
       
     def isEmpty(self):
-        if(len(self.buffer)):
-         return False
-        else: 
-         return True
-     
+        return not bool(len(self.buffer))
+
 class Event(Identifiable):
     
-    def __init__(self):
-        pass 
+    def __init__(self, source=None):
+        self.__source = source
+
+    @property
+    def source(self):
+        if self.__source is None:
+            raise ValueError("Event '{0}' has no source, did you forget to set the source?")
+        return self.__source 
+
+    def source(self, value):
+        if self.__source is None:
+            self.__source = value
+        else:
+            raise ValueError("Cannot re-set source of event {0}".format(self.ID))
     
 class Perception(Event):
     
     def __init__(self):
         super(Perception, self).__init__()
-        
+
 class Action(Event):
     
     def __init__(self):
         super(Action, self).__init__()
-        self.__actor__ = None
-        
-    def __post_init__(self, actor):
-        self.__actor__ = actor
         
 class Executor:
     
@@ -90,4 +91,9 @@ class Executor:
     def __call__(self, env, action):
         pass
     
-      
+# ======================================================== #
+# ====================== FACTORY ========================= #
+# ======================================================== #
+
+def new_action(name, base_type=(Action,), *data):
+    return type(name, base_type, {'data':data}) #dynamically creates a new action class
