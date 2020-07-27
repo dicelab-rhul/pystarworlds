@@ -59,6 +59,7 @@ class Transient(Source, Sink):
 class Event(Identifiable):
     
     def __init__(self, source=None):
+        super(Event, self).__init__()
         self.__source = source
 
     @property
@@ -67,6 +68,7 @@ class Event(Identifiable):
             raise ValueError("Event '{0}' has no source, did you forget to set the source?")
         return self.__source 
 
+    @source.setter
     def source(self, value):
         if self.__source is None:
             self.__source = value
@@ -95,5 +97,5 @@ class Executor:
 # ====================== FACTORY ========================= #
 # ======================================================== #
 
-def new_action(name, base_type=(Action,), *data):
+def new_action(name, *data, base_type=(Action,)):
     return type(name, base_type, {'data':data}) #dynamically creates a new action class

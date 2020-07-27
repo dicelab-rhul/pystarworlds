@@ -62,7 +62,7 @@ class Mind(BodyComponent):
     def __init__(self, *args, **kwargs):
         super(Mind, self).__init__(*args, **kwargs)
 
-    def cycle(self):
+    def cycle(self): #TODO make abstract
         pass
 
 class Actuator(BodyComponent, Transient):
@@ -138,7 +138,8 @@ class Body(Identifiable):
         '''
         try:
             for actuator, action in actions.items():
-                self.__actuators[actuator].attempt(action)
+                if action is not None:
+                    self.__actuators[actuator].attempt(action)
         except KeyError as e:
             pass #TODO raise InternalAgent Error
     
@@ -152,7 +153,7 @@ class Body(Identifiable):
                 percepts (dict): {sensor_name:[percept1, percept2], ...}
         '''
         perceptions = {}
-        if type is None:
+        if key is None: #get all perceptions for all sensors
             for name, sensor in self.__sensors.items():
                 perceptions[name] = [p for p in sensor]
         else:
@@ -175,7 +176,7 @@ def new_actuator(name, *actions, base_type=(Actuator,), **data):
     return a_cls
 
 def new_sensor(name, *perceptions, base_type=(Sensor,), **data):
-    s_cls = type(name, base_type, **data)
+    s_cls = type(name, base_type, data)
     s_cls.__perceptions__ = perceptions
-    c_cls.subscribe = property(lambda self: self.__perceptions__)
+    s_cls.subscribe = property(lambda self: self.__perceptions__)
     return s_cls
