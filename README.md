@@ -1,13 +1,51 @@
-# pystarworlds
+# PyStarWorlds
 
-LOCAL INSTALL PROCEEDURE:
+PyStarWorlds is currently in an early alpha. It is the current iteration in a line of work on MAS development platforms.
 
-1. Clone the repository
-2. Navigate to the pystarworlds directory (the one that contains setup.py) in terminal
-3. pip install -e .
+### Iterations with links:
+
+- GOLEM - Prolog (?) 
+- StarLite - Java 
+- PyStarWorlds - Python (current)
+
+### Why shift to Python? 
+
+- Interpreted language, the C/C++ backend means that the underlying system has great potential for optimisation. 
+- The defacto language for machine learning research, we want to make it easy to develop agents with learning capabilities.
+- Beyond single agent reinforcement learning (TODO)
+- 
+
+# Environment
+
+The enviroment uses two key abstractions _ambient_ and _physics_ explained below.
+
+## Ambient
+
+The (current) state of the environment which evolves in time according to the rules of the environment (physics). The specific implementation of the ambient is left up to the developer for now. In future versions we plan to support concurrent access to any user defined datastructues by default.
+
+## Physics
+
+The physics is a collection of rules that govern the evolution of the environment. Events/actions are processes according to these rules. (TODO details).
+
+## Containers * 
+
+The GOLEM framework introduced containers as a mechanism for distributing agent environments ... (TODO) 
+
+## Concurrency * 
+
+The environment runs on a single thread, the agents cycle (perceive/think/act) is treated as atomic and agents proceed serially. 
+Concurrency has been supported in previous iterations and is planned for the next major version(s) of PyStarWorlds.
+
+## Publish and Subscribe
+
+PyStarWorlds uses a type based publish and subcribe mechanism that is tied to the agents sensors. Events that originate from the environmental processes or other agents are received by any agents that subcribe to them.
+
+## Agents
+
+<img align="right" src="docs/agent.png">
 
 
-PIP UPLOAD
+# Related Projects
 
-python3 setup.py sdist bdist_wheel
-python -m twine upload dist/* 
+- [ICUA](https://github.com/dicelab-rhul/ICUA)
+- [Vacuum World](https://github.com/dicelab-rhul/vacuumworld)
