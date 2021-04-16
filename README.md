@@ -10,10 +10,8 @@ PyStarWorlds is currently in an early alpha. It is the current iteration in a li
 
 ### Why shift to Python? 
 
-- Interpreted language, the C/C++ backend means that the underlying system has great potential for optimisation. 
-- The defacto language for machine learning research, we want to make it easy to develop agents with learning capabilities.
-- Beyond single agent reinforcement learning (TODO)
-- 
+- Interpreted language, the C/C++ backend means that the underlying system has great potential efficient implementation, concurrency etc. 
+- The defacto language for machine learning research, part of our goal is to make it easy to develop agents with learning capabilities.
 
 # Environment
 
@@ -49,3 +47,4 @@ PyStarWorlds uses a type based publish and subcribe mechanism that is tied to th
 
 - [ICUA](https://github.com/dicelab-rhul/ICUA)
 - [Vacuum World](https://github.com/dicelab-rhul/vacuumworld)
+- [pyteleor](https://github.com/BenedictWilkins/pyteleor/tree/master/pyteleor)
