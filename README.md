@@ -1,16 +1,16 @@
 # PyStarWorlds
 
-PyStarWorlds is currently in an early alpha. It is the current iteration in a line of work on MAS development platforms.
+PyStarWorlds is currently in a prototype phase. It is the current iteration in a line of work on MAS development platforms.
 
-### Iterations with links:
+### Iterations:
 
-- GOLEM - Prolog (?) 
-- StarLite - Java 
-- PyStarWorlds - Python (current)
+- [GOLEM - Prolog]()
+- [StarLite - Java]()
+- [PyStarWorlds - Python (current)](https://github.com/dicelab-rhul/pystarworlds)
 
 ### Why shift to Python? 
 
-- Interpreted language, the C/C++ backend means that the underlying system has great potential efficient implementation, concurrency etc. 
+- Interpreted language, the C/C++ backend means that the system has great potential for efficient implementation, concurrency etc. 
 - The defacto language for machine learning research, part of our goal is to make it easy to develop agents with learning capabilities.
 
 # Environment
