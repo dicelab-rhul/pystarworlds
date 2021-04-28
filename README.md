@@ -6,7 +6,7 @@ PyStarWorlds is currently in a prototype phase and can be thought of more as a l
 
 ### Iterations:
 
-- [GOLEM - Prolog]()
+- [GOLEM - Prolog/Java]()
 - [StarLite - Java]()
 - [PyStarWorlds - Python (current)](https://github.com/dicelab-rhul/pystarworlds)
 
@@ -23,11 +23,11 @@ The enviroment uses two key abstractions _ambient_ and _physics_ explained below
 
 ## Ambient
 
-The (current) state of the environment which evolves in time according to the rules of the environment (physics). The specific implementation of the ambient is left up to the developer for now. 
+The (current) state of the environment which evolves in time according to the rules of the environment (physics). The implementation of the ambient is specific to the domain and is therefore left to the developer to define. 
 
 ## Physics
 
-The physics is a collection of rules that govern the evolution of the environment. Events/actions are processes according to these rules.
+The physics is a collection of rules that govern the evolution of the environment. Events/actions are processed according to these rules. There is a notification mechanism that enables agent perception based on a publish and subscribe mechanism. The publish and subcribe mechanism is tied to the agents sensors. Events that originate from environmental processes or other agents are received by any agents that subcribe to them.
 
 ## Containers * 
 
@@ -38,9 +38,7 @@ The GOLEM framework introduced containers as a mechanism for distributing agent 
 The environment runs on a single thread, the agents cycle (perceive/think/act) is treated as atomic and agents proceed serially. 
 Concurrency has been supported in previous iterations and is planned for the next major version(s) of PyStarWorlds.
 
-## Publish and Subscribe
 
-PyStarWorlds uses a type based publish and subcribe mechanism that is tied to the agents sensors. Events that originate from the environmental processes or other agents are received by any agents that subcribe to them.
 
 ## Agents
 
