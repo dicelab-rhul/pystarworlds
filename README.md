@@ -9,7 +9,7 @@ PyStarWorlds is currently in a prototype phase and can be thought of more as a l
 The history of this work is based on a series of iterations on the same topic, as follows:
 
 - [GOLEM - Prolog/Java]() - this is the main framework of this work, developed in the PhD thesis of <a href="https://research.ou.nl/en/persons/stefano-bromuri-2">Stefano Bromuri</a>;
-- [StarLite - Java]() - GOLEM on one container, developed by <a href="https://ataulm.com/">Ataul Munim</a>, for teaching purposes;
+- [StarWorlds-Lite - Java](https://bitbucket.org/Beans20/starworlds-lite-fork/src/master/) - GOLEM on one container, developed by <a href="https://pure.royalholloway.ac.uk/portal/en/persons/benedict-wilkins(3b223c0c-c3f2-4526-bdcb-847cb733f6e3).html">Ben Wilkins</a>, for teaching purposes;
 - [PyStarWorlds - Python (current)](https://github.com/dicelab-rhul/pystarworlds).
 
 ### Why shift to Python? 
