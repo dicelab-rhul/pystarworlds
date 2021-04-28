@@ -35,7 +35,7 @@ The GOLEM framework introduced containers as a mechanism for distributing agent 
 
 ## Concurrency * 
 
-The environment runs on a single thread, the agents cycle (perceive/think/act) is treated as atomic and agents proceed serially. 
+The environment runs on a single thread, the agents cycle (perceive-revise-decide-execute) is treated as atomic and agents proceed serially. 
 Concurrency has been supported in previous iterations and is planned for the next major version(s) of PyStarWorlds.
 
 
@@ -44,7 +44,7 @@ Concurrency has been supported in previous iterations and is planned for the nex
 
 PyStarWorlds interleaves environment and agent execution in a round-robin fashion. At each time step each agent runs a <i> perceive-revise-decide-execute</i> cycle returning an actionaccording to a given top level goal, determining the agent’s behaviour. We are exploring behaviour for each agent so that it is conceptualised with teleo-reactive condition action rules of the form:
 
-Goal: {Conditions1-> Action1,...,Conditionsn->Actionn},
+Goal:{Conditions1 &rarr; Action1, ..., Conditionsn &rarr; Actionn},
 
 where <i>Action</i> is either atomic or a <i>SubGoal</i> specified with further condition action rules. These behaviours are translated as Python methods, checking the current observations and the agent state to pursue the most appropriate agent intention at each time step in a dynamic manner.
 
