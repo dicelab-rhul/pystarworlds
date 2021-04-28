@@ -27,11 +27,11 @@ The (current) state of the environment which evolves in time according to the ru
 
 ## Physics
 
-The physics is a collection of rules that govern the evolution of the environment. Events/actions are processed according to these rules. There is a notification mechanism that enables agent perception based on a publish and subscribe mechanism. The publish and subcribe mechanism is tied to the agents sensors. Events that originate from environmental processes or other agents are received by any agents that subcribe to them.
+The physics is a collection of rules that govern the evolution of the environment. Events/actions are processed according to these rules. Notifications enable agent perception via a publish and subscribe mechanism. This mechanism is tied to the agents sensors, events that originate from environmental processes or other agents are received by any agent that subcribe to them.
 
 ## Containers * 
 
-The GOLEM framework introduced containers as a mechanism for distributing agent environments ... (TODO) 
+The GOLEM framework introduced containers as a mechanism for distributing agent environments, PyStarWorlds currently implements a single container. 
 
 ## Concurrency * 
 
