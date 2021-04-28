@@ -1,6 +1,8 @@
 # PyStarWorlds
 
-PyStarWorlds is currently in a prototype phase. It is the current iteration in a line of work on MAS development platforms.
+PyStarWorlds is currently a single container implementation of the [GOLEM](https://www.cs.rhul.ac.uk/home/kostas/pubs/debs09.pdf) framework implemented in Python. It rationalises various aspects of GOLEM and simplifies its agent model to support rapid prototyping of practical applications. The current system supports the deployment of multiple agents, that can observe and act in the environment in which they are situated. 
+
+PyStarWorlds is currently in a prototype phase and can be thought of more as a library rather than as a standalone platform. 
 
 ### Iterations:
 
@@ -11,7 +13,7 @@ PyStarWorlds is currently in a prototype phase. It is the current iteration in a
 ### Why shift to Python? 
 
 - Great for prototyping, rapid development ecosystem with many useful libraries.
-- Dynamic typing provides great advantages to developers using the platform. We found a strongly typed language difficult to work with when building environments on top of StarLite, particularly when writing environment evolution rules - Java generics were not sufficient!
+- Dynamic typing provides great advantages to developers using the platform. We have found a strongly typed language difficult to work with when building environments on top of StarLite, particularly when writing environment evolution rules - Java generics were not sufficient!
 - The defacto language for machine learning research, part of our goal is to make it easy to develop agents with learning capabilities.
 - Potential for future extension - a C/C++ backend means that the system has great potential for an efficient implementation, concurrency etc. 
 
@@ -21,7 +23,7 @@ The enviroment uses two key abstractions _ambient_ and _physics_ explained below
 
 ## Ambient
 
-The (current) state of the environment which evolves in time according to the rules of the environment (physics). The specific implementation of the ambient is left up to the developer for now. In future versions we plan to support concurrent access to any user defined datastructues by default. 
+The (current) state of the environment which evolves in time according to the rules of the environment (physics). The specific implementation of the ambient is left up to the developer for now. 
 
 ## Physics
 
