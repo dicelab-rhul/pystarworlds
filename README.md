@@ -39,11 +39,13 @@ The environment runs on a single thread, treats the agents' execution cycle (see
 
 ## Agents
 
-PyStarWorlds interleaves environment and agent execution in a round-robin fashion. At each time step each agent runs a <i> perceive-revise-decide-execute</i> cycle returning an action according to a given top level goal, determining the agent’s behaviour. We are exploring behaviour for each agent so that it is conceptualised with teleo-reactive condition action rules of the form:
+PyStarWorlds interleaves environment and agent execution in a round-robin fashion. At each time step each agent runs a <i> perceive-revise-decide-execute</i> cycle returning an action according to a given top level goal, determining the agent’s behaviour. Given this agent cycle, a developer is free to specify these methods, according to the needs of the application.
+
+To aid the agent development, we recommend that the behaviour for each agent to be conceptualised with teleo-reactive condition action rules of the form:
 
 <i>Goal:{Conditions<sub>1</sub> &rarr; Action<sub>1</sub>, ..., Conditions<sub>n</sub> &rarr; Action<sub>n</sub>}</i>,
 
-where <i>Action><sub>i</sub></i> is either atomic or a <i>SubGoal</i> specified with further condition action rules. These behaviours are translated as Python methods, checking the current observations and the agent state to pursue the most appropriate agent intention at each time step in a dynamic manner.
+where an <i>Action<sub>i</sub></i> is either atomic or a <i>SubGoal</i> specified with further condition action rules. These behaviours are translated as Python methods, checking the current observations and the agent state to pursue the most appropriate agent intention at each time step in a dynamic manner.
 
 <img align="right" src="docs/agent.png">
 
