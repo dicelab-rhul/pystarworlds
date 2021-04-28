@@ -42,6 +42,12 @@ Concurrency has been supported in previous iterations and is planned for the nex
 
 ## Agents
 
+PyStarWorlds interleaves environment and agent execution in a round-robin fashion. At each time step each agent runs a <i> perceive-revise-decide-execute</i> cycle returning an actionaccording to a given top level goal, determining the agent’s behaviour. We are exploring behaviour for each agent so that it is conceptualised with teleo-reactive condition action rules of the form:
+
+Goal: {Conditions1-> Action1,...,Conditionsn->Actionn},
+
+whereAction is either atomic or a SubGoal specified with further condition action rules. hese behavioursare translated as Python methods, checking the current observations and the agent state to pursue the most appropriate agent intention at each time step in a dynamic manner.
+
 <img align="right" src="docs/agent.png">
 
 # Related Projects
