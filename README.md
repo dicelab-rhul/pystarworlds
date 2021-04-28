@@ -10,11 +10,10 @@ PyStarWorlds is currently in a prototype phase. It is the current iteration in a
 
 ### Why shift to Python? 
 
-- Interpreted language, the C/C++ backend means that the system has great potential for efficient implementation, concurrency etc. 
 - Great for prototyping, rapid development ecosystem with many useful libraries.
-- Dynamic typing provides great advantages to developers using the platform. We found a strongly type language difficult to work with when building environments on top of StarLite, particularly when writing environment evolution rules - Java generics were not sufficient!
+- Dynamic typing provides great advantages to developers using the platform. We found a strongly typed language difficult to work with when building environments on top of StarLite, particularly when writing environment evolution rules - Java generics were not sufficient!
 - The defacto language for machine learning research, part of our goal is to make it easy to develop agents with learning capabilities.
-
+- Potential for future extension - a C/C++ backend means that the system has great potential for an efficient implementation, concurrency etc. 
 
 # Environment
 
