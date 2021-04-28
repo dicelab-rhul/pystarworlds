@@ -46,7 +46,7 @@ PyStarWorlds interleaves environment and agent execution in a round-robin fashio
 
 Goal: {Conditions1-> Action1,...,Conditionsn->Actionn},
 
-whereAction is either atomic or a SubGoal specified with further condition action rules. hese behavioursare translated as Python methods, checking the current observations and the agent state to pursue the most appropriate agent intention at each time step in a dynamic manner.
+where <i>Action</i> is either atomic or a <i>SubGoal</i> specified with further condition action rules. These behaviours are translated as Python methods, checking the current observations and the agent state to pursue the most appropriate agent intention at each time step in a dynamic manner.
 
 <img align="right" src="docs/agent.png">
 
