@@ -1,14 +1,18 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
-@author: Nausheen Saba Shahid
-@author: Benedict Wilkins
-"""
+    Created on 20-11-2020 15:22:00
 
-#from ABC import abstractmethod
+    [Description]
+"""
+__author__ = "Benedict Wilkins, Nausheen Saba Shahid"
+__email__ = "benrjw@gmail.com"
+__status__ = "Development"
 
 from collections import UserDict
 
-from .Identifiable import Identifiable
-from .Event import Transient
+from ..common import Identifiable
+from ..event import Transient
 
 class InternalAgentError(Exception):
     pass

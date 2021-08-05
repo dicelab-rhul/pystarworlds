@@ -1,13 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
-@author: Benedict Wilkins
-@author: Nausheen Saba Shahid
-"""
+    Created on 20-11-2020 15:22:52
 
-import warnings
+    [Description]
+"""
+__author__ = "Benedict Wilkins, Nausheen Saba Shahid"
+__email__ = "benrjw@gmail.com"
+__status__ = "Development"
 
 from abc import  abstractmethod
-
-from .Identifiable import Identifiable
+from ..common import Identifiable
 
 class Source:
     
@@ -23,13 +26,13 @@ class Source:
     
 class Sink:
     
-    def __init__(self, buffer):
-        self.buffer = buffer
+    def __init__(self):
+        pass 
     
     def sink(self, event):
-        assert type(event) in type(self).subscribe
-        self.buffer.append(event)
-    
+        #assert type(event) in type(self).subscribe TODO use in a decorator in all subclasses? 
+        pass 
+
 class Transient(Source, Sink):
     
     def __init__(self):
@@ -49,7 +52,7 @@ class Transient(Source, Sink):
     
     def sink(self, event):
         self.buffer.append(event)
-        
+
     def clear(self):
        self.buffer.clear()
       

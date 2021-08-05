@@ -1,7 +1,13 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
-@author Benedict Wilkins
-@author: Nausheen Saba Shahid
+    Created on 20-11-2020 15:21:34
 """
+__author__ = "Benedict Wilkins"
+__email__ = "benrjw@gmail.com"
+__status__ = "Development"
+
+# TODO define a keyword for the id generator? 
 
 class Identifiable:    #Identifiable is inherited from ABC
          
@@ -14,7 +20,6 @@ class Identifiable:    #Identifiable is inherited from ABC
     IDGEN = SimpleIDGenerator()
     
     def __new__(cls, *args, **kwargs):
-        #print("NEW", *args, **kwargs)
         obj = super(Identifiable, cls).__new__(cls)
         obj.__ID = next(Identifiable.IDGEN)
         return obj

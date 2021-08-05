@@ -1,41 +1,50 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
-@author: Nausheen Saba Shahid
-@author: Benedict Wilkins
-"""
+    Created on 20-11-2020 15:22:19
 
-from .Identifiable import Identifiable
-#from .Perception import Perception
+    [Description]
+"""
+__author__ = "Benedict Wilkins, Nausheen Saba Shahid"
+__email__ = "benrjw@gmail.com"
+__status__ = "Development"
+
 from collections import defaultdict
+
+from ..common import Identifiable
+from ..event import Transient
+
 
 class Environment(Identifiable):
     
-    def __init__(self, physics, ambient, processes=[], *args):  
+    def __init__(self, physics, ambient, *args, **kwargs):
+        super(Environment, self).__init__(*args, **kwargs)
+
         self.physics = physics
         self.ambient = ambient
         for agent in ambient.agents.values():
             self.physics.subscribe(agent)
 
-        self.processes = processes
     
     def simulate(self, cycles=1):
         for i in range(cycles):
-            self.evolveEnvironment()   
+            self.evolve()   
 
     def evolve(self):
-        self.evolveEnvironment()
-                  
-    def evolveEnvironment(self): #TODO remove in favour of evolve
-        #allow all processes to do thier thing
-        for process in self.processes:
-            events = process(self)
-            self.physics.execute(self, events)
+        # TODO process events in order  ? this is probably quite a complex issue, currently processes execute first, then agents
+
+        for process in self.ambient.processes.values():
+            self.physics.execute(self, [e for e in process])
+
+        for obj in self.ambient.objects.values():
+            self.physics.execute(self, [e for e in obj])
 
         agents = self.ambient.agents.values()
         for a in agents:
             a.cycle()
             
         attempts = [action for agent in agents for actuator in agent.actuators.values() for action in actuator]
-        events = self.physics.execute(self, attempts)
+        self.physics.execute(self, attempts)
     
     def __str__(self):
         return super().__str__() + "~"+  str(self.__ambient__)
@@ -49,9 +58,10 @@ class Environment(Identifiable):
     
 class Ambient(Identifiable):
     
-    def __init__(self, agents, objects=[]):
+    def __init__(self, agents, objects=[], processes=[]):
         self.agents = {ag.ID:ag for ag in agents}
-        self.objects = {obj.ID:obj for obj in objects} #what is this conceptually?  
+        self.objects = {obj.ID:obj for obj in objects}
+        self.processes = {proc.ID:proc for proc in processes} 
     
 class Physics(Identifiable):
          
@@ -79,33 +89,19 @@ class Physics(Identifiable):
     def execute(self, env, events):
         result = []
         for event in events:
-           new_events = self.executors[type(event)](env, event) #make changes to the ambient
-           if new_events is not None:
-               result.extend(new_events)
-        return result
-        
-        
-''' No.
-   def execute(self,attempts,env,valid_actions,rule_factories,executeaction_factories):
-       for act in attempts:
-           if type(act) in valid_actions:
-               for rule_factory in rule_factories:
-                  if(type(act)==rule_factory._type) and rule_factory(env,act):
-                   for executeaction_factory in executeaction_factories:
-                      if (type(act)==executeaction_factory._type):     
-                         executeaction_factory(env,act)
-                        
-'''          
+            new_events = self.executors[type(event)](env, event)
+            if new_events is not None:
+                result.extend(new_events)
 
-class Process(Identifiable):
-    
-    def __init__(self):
-        pass
-    
-    def __call__(self, env):
-        pass #return a list of events
+        self.execute(result)    
+
+class Object(Identifiable, Transient):
+    pass 
+
+class Process(Identifiable, Source):
+    pass 
             
-                
+   
    
   
    
