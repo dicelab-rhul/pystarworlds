@@ -9,7 +9,7 @@ Created on Tue Mar 19 13:12:18 2019
 import setuptools
 
 setuptools.setup(name='pystarworlds',
-      version='0.0.4',
+      version='0.0.5',
       description='',
       url='https://github.com/dicelab-rhul/pystarworlds',
       author='Nausheen Saba, Benedict Wilkins, Joel Clarke',
