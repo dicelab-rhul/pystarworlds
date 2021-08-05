@@ -36,8 +36,9 @@ class Sink:
 class Transient(Source, Sink):
     
     def __init__(self):
-        Sink.__init__(self, [])
+        Sink.__init__(self)
         Source.__init__(self)
+        self.buffer = []
 
     def __len__(self):
         return len(self.buffer)

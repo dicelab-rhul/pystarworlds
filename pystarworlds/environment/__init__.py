@@ -12,8 +12,7 @@ __status__ = "Development"
 from collections import defaultdict
 
 from ..common import Identifiable
-from ..event import Transient
-
+from ..event import Transient, Source
 
 class Environment(Identifiable):
     
@@ -92,8 +91,9 @@ class Physics(Identifiable):
             new_events = self.executors[type(event)](env, event)
             if new_events is not None:
                 result.extend(new_events)
-
-        self.execute(result)    
+                
+        if len(result) > 0:
+            self.execute(env, result)    
 
 class Object(Identifiable, Transient):
     pass 
